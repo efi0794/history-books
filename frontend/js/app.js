@@ -29,6 +29,8 @@ const myPageBtn = document.getElementById('myPageBtn');
 let currentToken = localStorage.getItem('token');
 let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
 let currentEditingId = null;
+let previousScreen = null; // 前の画面を記憶
+let isInMyPage = false; // マイページにいるかどうかを記憶
 
 // 初期化
 document.addEventListener('DOMContentLoaded', () => {
@@ -58,15 +60,24 @@ function updateUserInfo() {
 function setupEventListeners() {
   loginForm.addEventListener('submit', handleLogin);
   registerForm.addEventListener('submit', handleRegister);
-  newPostBtn.addEventListener('click', showFormScreen);
-  myPageNewPostBtn.addEventListener('click', showFormScreen);
-  backBtn.addEventListener('click', showListScreen);
-  cancelBtn.addEventListener('click', showListScreen);
-  detailBackBtn.addEventListener('click', showListScreen);
+  newPostBtn.addEventListener('click', () => { isInMyPage = false; showFormScreen(); });
+  myPageNewPostBtn.addEventListener('click', () => { isInMyPage = true; showFormScreen(); });
+  backBtn.addEventListener('click', goBack);
+  cancelBtn.addEventListener('click', goBack);
+  detailBackBtn.addEventListener('click', goBack);
   myPageBackBtn.addEventListener('click', showListScreen);
   novelForm.addEventListener('submit', handleFormSubmit);
   logoutBtn.addEventListener('click', handleLogout);
   if (myPageBtn) myPageBtn.addEventListener('click', showMyPage);
+}
+
+// 一つ前の画面に戻る
+function goBack() {
+  if (isInMyPage) {
+    showMyPage();
+  } else {
+    showListScreen();
+  }
 }
 
 // ログイン処理
@@ -295,23 +306,30 @@ async function showEditForm(id) {
 
 // 一覧画面表示
 function showListScreen() {
+  isInMyPage = false;
   switchScreen(listScreen);
   loadNovels();
 }
 
 // マイページ（自分の投稿のみ表示）
 function showMyPage() {
+  console.log('🔍 showMyPage called, currentUser:', currentUser);
+  console.log('📄 myPageList element:', myPageList);
+  
   if (!currentUser) {
     alert('ログインしてください');
     switchScreen(loginScreen);
     return;
   }
+  isInMyPage = true;
   loadMyNovels();
   switchScreen(myPageScreen);
+  console.log('✅ switched to myPageScreen');
 }
 
 async function loadMyNovels() {
   try {
+    console.log('📥 loadMyNovels starting...');
     const response = await fetch(`${API_URL}/novels`, {
       headers: { 'Authorization': `Bearer ${currentToken}` },
     });
@@ -319,10 +337,12 @@ async function loadMyNovels() {
     if (!response.ok) throw new Error('データ取得失敗');
 
     const novels = await response.json();
+    console.log('📚 fetched novels:', novels);
     const myNovels = novels.filter(n => currentUser && (currentUser.id === n.userId || currentUser.id === n.user));
+    console.log('🎯 filtered myNovels:', myNovels);
     displayMyNovels(myNovels);
   } catch (error) {
-    console.error('エラー:', error);
+    console.error('❌ エラー:', error);
     myPageList.innerHTML = '<p class="loading">データの読み込みに失敗しました</p>';
   }
 }
