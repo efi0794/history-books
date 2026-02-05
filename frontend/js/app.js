@@ -69,6 +69,15 @@ function setupEventListeners() {
   novelForm.addEventListener('submit', handleFormSubmit);
   logoutBtn.addEventListener('click', handleLogout);
   if (myPageBtn) myPageBtn.addEventListener('click', showMyPage);
+  
+  // ジャンルフィルター
+  const genreFilter = document.getElementById('genreFilter');
+  if (genreFilter) {
+    genreFilter.addEventListener('change', (e) => {
+      selectedGenre = e.target.value;
+      filterAndDisplayNovels();
+    });
+  }
 }
 
 // 一つ前の画面に戻る
@@ -234,9 +243,10 @@ async function showEditForm(id) {
     if (!response.ok) throw new Error('データ取得失敗');
 
     const novel = await response.json();
+    const novelUserId = novel.userId?._id || novel.userId;
 
     // 所有者確認
-    if (currentUser.id !== novel.userId) {
+    if (currentUser.id !== novelUserId) {
       alert('編集権限がありません');
       return;
     }

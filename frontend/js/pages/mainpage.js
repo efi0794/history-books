@@ -1,6 +1,9 @@
 // メイン一覧表示機能
 // すべてのユーザーの投稿を表示
 
+let allNovels = []; // 全投稿を保管
+let selectedGenre = ''; // 選択中のジャンル
+
 async function loadNovels() {
   try {
     const response = await fetch(`${API_URL}/novels`, {
@@ -11,12 +14,23 @@ async function loadNovels() {
 
     if (!response.ok) throw new Error('データ取得失敗');
 
-    const novels = await response.json();
-    displayNovels(novels);
+    allNovels = await response.json();
+    filterAndDisplayNovels();
   } catch (error) {
     console.error('❌ エラー:', error);
     novelList.innerHTML = '<p class="loading">データの読み込みに失敗しました</p>';
   }
+}
+
+// ジャンル選択時のフィルター処理
+function filterAndDisplayNovels() {
+  let filteredNovels = allNovels;
+  
+  if (selectedGenre) {
+    filteredNovels = allNovels.filter(novel => novel.genre === selectedGenre);
+  }
+  
+  displayNovels(filteredNovels);
 }
 
 // 小説表示
@@ -53,6 +67,10 @@ function displayNovels(novels) {
 function showListScreen() {
   console.log('📄 Showing main list screen');
   isInMyPage = false;
+  selectedGenre = ''; // ジャンルフィルターをリセット
+  const genreFilter = document.getElementById('genreFilter');
+  if (genreFilter) genreFilter.value = ''; // UIもリセット
   switchScreen(listScreen);
   loadNovels();
 }
+
