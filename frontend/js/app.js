@@ -186,7 +186,8 @@ async function showDetailScreen(id) {
     if (!response.ok) throw new Error('データ取得失敗');
 
     const novel = await response.json();
-    const isOwner = currentUser && currentUser.id === novel.userId;
+    const novelUserId = novel.userId?._id || novel.userId;
+    const isOwner = currentUser && currentUser.id === novelUserId;
 
     detailContent.innerHTML = `
       <h2>${escapeHtml(novel.title)}</h2>

@@ -27,7 +27,8 @@ function displayNovels(novels) {
   }
 
   novelList.innerHTML = novels.map(novel => {
-    const isOwner = currentUser && currentUser.id === novel.userId;
+    const novelUserId = novel.userId?._id || novel.userId;
+    const isOwner = currentUser && currentUser.id === novelUserId;
     return `
       <div class="novel-card" onclick="showDetailScreen('${novel._id}')">
         <h3>${escapeHtml(novel.title)}</h3>

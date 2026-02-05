@@ -4,6 +4,7 @@
 async function loadMyNovels() {
   try {
     console.log('📥 loadMyNovels starting...');
+    console.log('👤 currentUser:', currentUser);
     const response = await fetch(`${API_URL}/novels`, {
       headers: { 'Authorization': `Bearer ${currentToken}` },
     });
@@ -11,8 +12,16 @@ async function loadMyNovels() {
     if (!response.ok) throw new Error('データ取得失敗');
 
     const novels = await response.json();
-    console.log('📚 fetched novels:', novels);
-    const myNovels = novels.filter(n => currentUser && (currentUser.id === n.userId || currentUser.id === n.user));
+    console.log('📚 fetched all novels:', novels);
+    
+    // userIdは populate されている可能性があるため、_id を確認
+    const myNovels = novels.filter(n => {
+      if (!currentUser) return false;
+      const novelUserId = n.userId?._id || n.userId;
+      console.log('🔍 Comparing:', { currentUserId: currentUser.id, novelUserId });
+      return currentUser.id === novelUserId;
+    });
+    
     console.log('🎯 filtered myNovels:', myNovels);
     displayMyNovels(myNovels);
   } catch (error) {
@@ -29,7 +38,8 @@ function displayMyNovels(novels) {
   }
 
   myPageList.innerHTML = novels.map(novel => {
-    const isOwner = currentUser && currentUser.id === novel.userId;
+    const novelUserId = novel.userId?._id || novel.userId;
+    const isOwner = currentUser && currentUser.id === novelUserId;
     return `
       <div class="novel-card" onclick="showDetailScreen('${novel._id}')">
         <h3>${escapeHtml(novel.title)}</h3>
