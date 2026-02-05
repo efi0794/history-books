@@ -6,14 +6,14 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #A0826D 0%, #7B5A3E 50%, #5C4033 100%);
+  background: linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 50%, #A0A0A0 100%);
   color: #333;
   min-height: 100vh;
 }
 
 /* ヘッダー */
 header {
-  background: linear-gradient(135deg, #8B6F47 0%, #6B4423 100%);
+  background: linear-gradient(135deg, #B0B0B0 0%, #808080 100%);
   color: white;
   padding: 2rem 1rem;
   text-align: center;
@@ -86,13 +86,13 @@ main {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #8B6F47 0%, #6B4423 100%);
+  background: linear-gradient(135deg, #B0B0B0 0%, #808080 100%);
   color: white;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(139, 111, 71, 0.4);
+  box-shadow: 0 6px 12px rgba(176, 176, 176, 0.4);
 }
 
 .btn-secondary {
@@ -117,7 +117,7 @@ main {
 
 .btn-back {
   background: transparent;
-  color: #8B6F47;
+  color: #808080;
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
 }
@@ -171,12 +171,12 @@ main {
 }
 
 .filter-section select:hover {
-  border-color: #8B6F47;
+  border-color: #808080;
 }
 
 .filter-section select:focus {
   outline: none;
-  border-color: #8B6F47;
+  border-color: #808080;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -203,11 +203,11 @@ main {
 .novel-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 28px rgba(102, 126, 234, 0.15);
-  border-color: #8B6F47;
+  border-color: #808080;
 }
 
 .novel-card h3 {
-  color: #8B6F47;
+  color: #808080;
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
 }
@@ -228,7 +228,7 @@ main {
 .novel-card .genre {
   display: inline-block;
   background: #e8eaf6;
-  color: #8B6F47;
+  color: #808080;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -289,7 +289,7 @@ main {
 }
 
 .form-header h2 {
-  color: #8B6F47;
+  color: #808080;
   font-size: 1.5rem;
 }
 
@@ -328,7 +328,7 @@ main {
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #8B6F47;
+  border-color: #808080;
   background-color: #f5f7ff;
 }
 
@@ -357,7 +357,7 @@ textarea {
 }
 
 .rating-selector input[type="radio"]:checked + label {
-  background: linear-gradient(135deg, #8B6F47 0%, #5C4033 100%);
+  background: linear-gradient(135deg, #808080 0%, #606060 100%);
   color: white;
   border-color: transparent;
 }
@@ -386,7 +386,7 @@ textarea {
 }
 
 .detail-content h2 {
-  color: #8B6F47;
+  color: #808080;
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
@@ -413,7 +413,7 @@ textarea {
 
 .detail-content .genre-tag {
   background: #e8eaf6;
-  color: #8B6F47;
+  color: #808080;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -476,7 +476,7 @@ footer {
 }
 
 .mypage-header h2 {
-  color: #8B6F47;
+  color: #808080;
   font-size: 1.5rem;
   flex: 1;
   text-align: center;
@@ -552,7 +552,7 @@ footer {
 }
 
 .auth-form h2 {
-  color: #8B6F47;
+  color: #808080;
   margin-bottom: 2rem;
   text-align: center;
   font-size: 1.8rem;
@@ -573,7 +573,7 @@ footer {
 
 .auth-form input:focus {
   outline: none;
-  border-color: #8B6F47;
+  border-color: #808080;
   background-color: #f5f7ff;
 }
 
@@ -589,7 +589,7 @@ footer {
 }
 
 .auth-switch a {
-  color: #8B6F47;
+  color: #808080;
   text-decoration: none;
   font-weight: 600;
 }
