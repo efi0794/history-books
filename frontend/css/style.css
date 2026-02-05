@@ -144,7 +144,9 @@ main {
 
 .novel-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* 中央寄せの一本カラム風レイアウト（画面幅に応じて幅を調整） */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 600px));
+  justify-content: center;
   gap: 2rem;
 }
 
@@ -412,6 +414,25 @@ footer {
   text-align: center;
   padding: 1.5rem;
   margin-top: 3rem;
+}
+
+/* マイページ固定ボタン */
+.mypage-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .mypage-btn {
+    right: 12px;
+    bottom: 12px;
+    padding: 0.6rem 0.9rem;
+  }
 }
 
 /* 認証画面 */

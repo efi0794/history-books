@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/api';
+// APIは同一オリジンで提供するため相対パスを使用
+const API_URL = '/api';
 
 // DOM要素
 const loginScreen = document.getElementById('loginScreen');
@@ -19,6 +20,7 @@ const formTitle = document.getElementById('formTitle');
 const userInfo = document.getElementById('userInfo');
 const usernameDisplay = document.getElementById('usernameDisplay');
 const logoutBtn = document.getElementById('logoutBtn');
+const myPageBtn = document.getElementById('myPageBtn');
 
 let currentToken = localStorage.getItem('token');
 let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
@@ -58,8 +60,7 @@ function setupEventListeners() {
   detailBackBtn.addEventListener('click', showListScreen);
   novelForm.addEventListener('submit', handleFormSubmit);
   logoutBtn.addEventListener('click', handleLogout);
-}
-
+  if (myPageBtn) myPageBtn.addEventListener('click', showMyPage);
 // ログイン処理
 async function handleLogin(e) {
   e.preventDefault();
@@ -288,6 +289,34 @@ async function showEditForm(id) {
 function showListScreen() {
   switchScreen(listScreen);
   loadNovels();
+}
+
+// マイページ（自分の投稿のみ表示）
+function showMyPage() {
+  if (!currentUser) {
+    alert('ログインしてください');
+    switchScreen(loginScreen);
+    return;
+  }
+  switchScreen(listScreen);
+  loadMyNovels();
+}
+
+async function loadMyNovels() {
+  try {
+    const response = await fetch(`${API_URL}/novels`, {
+      headers: { 'Authorization': `Bearer ${currentToken}` },
+    });
+
+    if (!response.ok) throw new Error('データ取得失敗');
+
+    const novels = await response.json();
+    const myNovels = novels.filter(n => currentUser && (currentUser.id === n.userId || currentUser.id === n.user));
+    displayNovels(myNovels);
+  } catch (error) {
+    console.error('エラー:', error);
+    novelList.innerHTML = '<p class="loading">データの読み込みに失敗しました</p>';
+  }
 }
 
 // 画面切り替え
