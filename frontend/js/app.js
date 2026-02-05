@@ -7,11 +7,15 @@ const registerScreen = document.getElementById('registerScreen');
 const listScreen = document.getElementById('listScreen');
 const formScreen = document.getElementById('formScreen');
 const detailScreen = document.getElementById('detailScreen');
+const myPageScreen = document.getElementById('myPageScreen');
 const novelList = document.getElementById('novelList');
+const myPageList = document.getElementById('myPageList');
 const novelForm = document.getElementById('novelForm');
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const newPostBtn = document.getElementById('newPostBtn');
+const myPageBackBtn = document.getElementById('myPageBackBtn');
+const myPageNewPostBtn = document.getElementById('myPageNewPostBtn');
 const backBtn = document.getElementById('backBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 const detailBackBtn = document.getElementById('detailBackBtn');
@@ -55,12 +59,16 @@ function setupEventListeners() {
   loginForm.addEventListener('submit', handleLogin);
   registerForm.addEventListener('submit', handleRegister);
   newPostBtn.addEventListener('click', showFormScreen);
+  myPageNewPostBtn.addEventListener('click', showFormScreen);
   backBtn.addEventListener('click', showListScreen);
   cancelBtn.addEventListener('click', showListScreen);
   detailBackBtn.addEventListener('click', showListScreen);
+  myPageBackBtn.addEventListener('click', showListScreen);
   novelForm.addEventListener('submit', handleFormSubmit);
   logoutBtn.addEventListener('click', handleLogout);
   if (myPageBtn) myPageBtn.addEventListener('click', showMyPage);
+}
+
 // ログイン処理
 async function handleLogin(e) {
   e.preventDefault();
@@ -298,8 +306,8 @@ function showMyPage() {
     switchScreen(loginScreen);
     return;
   }
-  switchScreen(listScreen);
   loadMyNovels();
+  switchScreen(myPageScreen);
 }
 
 async function loadMyNovels() {
@@ -312,11 +320,40 @@ async function loadMyNovels() {
 
     const novels = await response.json();
     const myNovels = novels.filter(n => currentUser && (currentUser.id === n.userId || currentUser.id === n.user));
-    displayNovels(myNovels);
+    displayMyNovels(myNovels);
   } catch (error) {
     console.error('エラー:', error);
-    novelList.innerHTML = '<p class="loading">データの読み込みに失敗しました</p>';
+    myPageList.innerHTML = '<p class="loading">データの読み込みに失敗しました</p>';
   }
+}
+
+// マイページ用の小説表示
+function displayMyNovels(novels) {
+  if (novels.length === 0) {
+    myPageList.innerHTML = '<p class="loading">まだ投稿がありません。新しい投稿をしてみましょう！</p>';
+    return;
+  }
+
+  myPageList.innerHTML = novels.map(novel => {
+    const isOwner = currentUser && currentUser.id === novel.userId;
+    return `
+      <div class="novel-card" onclick="showDetailScreen('${novel._id}')">
+        <h3>${escapeHtml(novel.title)}</h3>
+        <p class="author">著者: ${escapeHtml(novel.author)}</p>
+        <p class="posted-by">投稿者: ${escapeHtml(novel.username)}</p>
+        ${novel.genre ? `<span class="genre">${escapeHtml(novel.genre)}</span>` : ''}
+        <p class="rating">${getStarRating(novel.rating)}</p>
+        <p class="description">${escapeHtml(novel.description)}</p>
+        <p class="date">${formatDate(novel.postedAt)}</p>
+        <div class="card-actions">
+          ${isOwner ? `
+            <button class="btn btn-secondary" onclick="event.stopPropagation(); showEditForm('${novel._id}')"\>編集</button>
+            <button class="btn btn-danger" onclick="event.stopPropagation(); deleteNovel('${novel._id}')"\>削除</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // 画面切り替え

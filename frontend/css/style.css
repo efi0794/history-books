@@ -416,6 +416,64 @@ footer {
   margin-top: 3rem;
 }
 
+/* マイページ画面 */
+#myPageScreen {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mypage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.mypage-header h2 {
+  color: #667eea;
+  font-size: 1.5rem;
+  flex: 1;
+  text-align: center;
+  min-width: 250px;
+}
+
+.mypage-header .btn-back {
+  padding: 0.6rem 1rem;
+}
+
+.mypage-header .btn-primary {
+  padding: 0.75rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .mypage-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .mypage-header h2 {
+    order: 1;
+    width: 100%;
+    font-size: 1.3rem;
+  }
+
+  .mypage-header .btn-back {
+    order: 0;
+    align-self: flex-start;
+  }
+
+  .mypage-header .btn-primary {
+    order: 2;
+    width: 100%;
+  }
+}
+
 /* マイページ固定ボタン */
 .mypage-btn {
   position: fixed;
